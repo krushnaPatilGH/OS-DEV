@@ -6,6 +6,8 @@
 - Readme.md
 
 ### current updates
-- created a bootloader that has boot signature and prints a hello message
-- created a make file to automate process
-- created a readme file
+- Implemented FAT Headers
+- Implemented FAT Reading function
+- Implemented loading of second stage bootloader
+
+#### Note: Second stage bootloader not added yet only loading function is applied 
