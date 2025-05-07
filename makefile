@@ -18,6 +18,7 @@ all: $(BUILD_DIR)/$(FLOPPY_IMG)
 
 # Assemble the bootloader
 $(BUILD_DIR)/$(BOOT_BIN): $(SOURCE_DIR)/$(BOOT_SRC) 
+	mkdir -p build
 	$(ASM) -f bin -o $@ $<
 
 $(BUILD_DIR)/$(STAGE2_BIN): $(SOURCE_DIR)/$(STAGE2_SRC)
