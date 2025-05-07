@@ -106,6 +106,8 @@ SEARCH_STAGE2:                                                  ;find the entry 
     jmp     STAGE2_NOT_FOUND      
 
 FOUND_STAGE2:
+    
+
     mov     ax, [di + 26]
     mov     [STAGE2_CLUSTER], ax                                ;load first cluster address that is stored in the root dir
                                                                 ;cuz buffer will be overwritten by the FAT
@@ -159,6 +161,8 @@ NEXT_CLUSTER_AFTER:
     jmp     LOAD_STAGE2_LOOP
 
 READ_FINISH:
+
+
     mov     dl, [ebr_drive_number]                              ;load drive number int dl
     mov     ax, STAGE2_LOAD_SEGMENT                             ;stage 2 segment
     
@@ -255,6 +259,7 @@ PRINTCHAR:
     int     0x10
     ret
 PRINTSTRING:
+    pusha
     mov     al, [si]
     inc     si
     or      AL, AL
@@ -262,7 +267,9 @@ PRINTSTRING:
     call    PRINTCHAR
     jmp     PRINTSTRING
 DONE2:
+    popa
     ret
+
 
 
 STAGE2_NOT_FOUND:
@@ -283,6 +290,8 @@ WAIT_FOR_KEY:
 
 
 ;data 
+
+prints                  db "this is it", 0
 stage2_err              db "stage 2 not found", 0
 error_floppy_msg        db "error using floppy", 0
 HELLO_STRING            db "hello how's everyone", 0
