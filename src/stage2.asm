@@ -1,4 +1,5 @@
-[bits 16]
+org 0x500
+bits 16
 ENTRY:
 
 
@@ -61,7 +62,7 @@ A20WAIT2:
     [bits 16]
     in      al, 0x64
     test    al, 1
-    jnz     A20WAIT2
+    jz     A20WAIT2
     ret
 
 
@@ -125,8 +126,7 @@ boot_drive          db  0
 
 
 
-;GDT  datastructure note: it is divided 
-align 8
+
 gdt_start:
                     dq  0                           ;null descriptor
 
@@ -137,11 +137,9 @@ gdt_start:
                     db  0x0                         ;base   16-23
                     db  10011010b                   ;[1(present) , 00(DPL), 1(s), 
                                                     ; 1(code), 0(readonly), 1(executable), 0(not accessed)]
-                    db  11101111b                    ;[1(Granuality), 1(DB), 1(Long mode), 0(reserved),
+                    db  10101111b                    ;[1(Granuality), 1(DB), 1(Long mode), 0(reserved),
                                                     ; 1111(F => limit(16-19)) ]
                     db  0x0                         ;base   24-31
-                    dd  0x0                         ;base   32-61
-                    dd  0x0                         ;reserved  
 ;---------------------------------------------------------------------------------------------------------
 ;                   Data Segment
                     dw  0xFFFF                      ;limit  0-15bits
@@ -151,9 +149,7 @@ gdt_start:
                                                     ; 1(code), 0(readonly), 1(executable), 0(not accessed)]
                     db  11001111b                   ;[1(Granuality), 1(DB), 1(Long mode), 0(reserved),
                                                     ; 1111(F => limit(16-19)) ]
-                    db  0x0                         ;base   24-31
-                    dd  0x0                         ;base   32-61
-                    dd  0x0                         ;reserved                       
+                    db  0x0                         ;base   24-31                 
 ;---------------------------------------------------------------------------------------------------------
 gdt_end:
 gdt_desc:
@@ -162,7 +158,6 @@ gdt_desc:
     dd  0x0                                         ;gdt base address (upper 32)
 
 
-align 4096
 pml4_table:
     dq 0x0000000000001003   ; Points to PDPT, Present, Writable
     times 511 dq 0
