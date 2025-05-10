@@ -96,7 +96,7 @@ PROTECTED_MODE:
     mov cr0, eax
 
     ; Far jump to 64-bit code (selector 0x8 = code segment)
-    jmp 0x8:long_mode
+    jmp 0x18:long_mode
 
 [bits 64]
 long_mode:
@@ -131,13 +131,13 @@ gdt_start:
                     dq  0                           ;null descriptor
 
 ;---------------------------------------------------------------------------------------------------------                    
-;                   Code Segment          
+;                   Code Segment 32          
                     dw  0xFFFF                      ;limit  0-15bits
                     dw  0x0                         ;base   0-15
                     db  0x0                         ;base   16-23
                     db  10011010b                   ;[1(present) , 00(DPL), 1(s), 
                                                     ; 1(code), 0(readonly), 1(executable), 0(not accessed)]
-                    db  10101111b                    ;[1(Granuality), 1(DB), 1(Long mode), 0(reserved),
+                    db  11001111b                    ;[1(Granuality), 1(DB), 0(Long mode), 0(reserved),
                                                     ; 1111(F => limit(16-19)) ]
                     db  0x0                         ;base   24-31
 ;---------------------------------------------------------------------------------------------------------
@@ -151,6 +151,16 @@ gdt_start:
                                                     ; 1111(F => limit(16-19)) ]
                     db  0x0                         ;base   24-31                 
 ;---------------------------------------------------------------------------------------------------------
+;                   Code Segment 64         
+                    dw  0xFFFF                      ;limit  0-15bits
+                    dw  0x0                         ;base   0-15
+                    db  0x0                         ;base   16-23
+                    db  10011010b                   ;[1(present) , 00(DPL), 1(s), 
+                                                    ; 1(code), 0(readonly), 1(executable), 0(not accessed)]
+                    db  10101111b                    ;[1(Granuality), 0(DB), 1(Long mode), 0(reserved),
+                                                    ; 1111(F => limit(16-19)) ]
+                    db  0x0                         ;base   24-31
+
 gdt_end:
 gdt_desc:
     dw  gdt_end - gdt_start - 1                     ;size
